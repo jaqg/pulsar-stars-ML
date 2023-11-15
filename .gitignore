@@ -2,6 +2,7 @@ SVM/.venv
 SVM/Datasets/Readme.txt
 SVM/report/main.aux
 SVM/report/main.bbl
+SVM/report/main-blx.bib
 SVM/report/main.blg
 SVM/report/main.fdb_latexmk
 SVM/report/main.fls
