@@ -1,0 +1,115 @@
+\graphicspath{{./../script/pulsar-stars/}}
+% short document (1-2 pages) describing what you did and the data you used.
+
+% ------
+\section{Introduction}
+% ------
+Support Vector Machine (SVM), or support-vector network, is a supervised machine
+learning algorithm used for two-group classification and regression problems,
+which conceptually implement the following idea: input vectors are non
+linearly mapped to a very high-dimension feature space, in which a linear
+decision surface is constructed~\cite{cortes1995supportvector}.
+% It is constructed by combining: the solution technique from optimal
+% hyperplanes (that allows for an expansion of the solution vector on support
+% vectors), the idea of convolution of the dot-product (that extends the
+% solution surfaces from linear to non-linear), and the notion of soft margins 
+% to allow for errors on the training set)~\cite{cortes1995supportvector}.
+
+It was originally implemented for the restricted case where the training data
+can be separated without errors, but it has been extended to non-separable
+training data, as is the case of the data used in this report.
+After testing linear and non-linear 
+kernels~\cite{boser1992training, aizerman2019theoretical}, the Gaussian Radial
+Basis Function (RBF)~\cite{fornberg2011stable} kernel was used to construct the
+SVM.
+
+% ------
+\section{Data}
+% ------
+The chosen dataset is HTRU2~\cite{misc_htru2_372},
+which can be found in the
+\href{https://archive.ics.uci.edu/dataset/372/htru2}{UCI Machine Learning Repository}
+and in
+\href{https://www.kaggle.com/datasets/charitarth/pulsar-dataset-htru2}{kaggle}.
+HTRU2 is a data set which describes a sample of pulsar candidates collected
+during the High Time Resolution Universe Survey (South)~\cite{2016MNRAS.459.1104L}.
+
+Pulsars are a rare type of Neutron star that, as they (rapidly) rotate, produce 
+a detectable pattern of broadband radio emission, which repeats periodically.
+Each pulsar produces a slightly different emission pattern, which varies slightly
+with each rotation. 
+Thus, a potential signal detection, known as a ``candidate'', is averaged over many
+rotations of the pulsar.
+In the absence of additional info, each candidate could potentially describe a
+real pulsar.
+However, in practice almost all detections are caused by radio frequency
+interference (RFI) and noise, making legitimate signals hard to find
+~\cite{2016MNRAS.459.1104L, 2010MNRAS.409..619K, 2004hpa..book.....L}.
+Here is when machine learning algorithms come in hand to automatically label
+pulsar candidates, which is the purpose of this report.
+
+The dataset contains a total of 17898 samples, where 16259 are spurious examples
+caused by RFI/noise, and 1639 are real pulsar examples.
+Each candidate is described by 8 continuous variables, which correspond to
+simple statistic obtained from the integrated pulse profile and from the 
+dispersion signal-to-noise ratio (DM-SNR) curve.
+In the last entry, the class labels are 0 (negative) and 1 (positive):
+
+\begin{multicols}{2}
+    \begin{enumerate}
+        \item Mean of the integrated profile.
+        \item Standard deviation of the integrated profile.
+        \item Excess kurtosis of the integrated profile.
+        \item Skewness of the integrated profile.
+        \item Mean of the DM-SNR curve.
+        \item Standard deviation of the DM-SNR curve.
+        \item Excess kurtosis of the DM-SNR curve.
+        \item Skewness of the DM-SNR curve.
+    \end{enumerate}
+\end{multicols}
+
+Summary of the HTRU2 dataset samples:
+
+\begin{multicols}{3}
+    \begin{itemize}
+        \item 17898 total.
+        \item 1639 (9.16\%) positive.
+        \item 16259 (90.84\%) negative.
+    \end{itemize}
+\end{multicols}
+
+In order to visualize the data, the pairplot of the dataset is shown in
+\ref{fig:pairplot}.
+
+\begin{figure}[b!]
+    \centering
+    \includegraphics[width=1.0\textwidth]{pairplot.jpg}
+    % \subimport{figures/}{../script/giants-dwarfs/pairplot.pdf.pgf}
+    \caption{Pairplot of the HTRU2 dataset.}
+    \label{fig:pairplot}
+\end{figure}
+
+Looking at the positive $\left( \approx 10\% \right)$ \textit{vs} negative 
+$\left( \approx 90\% \right)$ ratio and the pairplot in \cref{fig:pairplot},
+the raw data is imbalanced.
+It can be confirmed simply by eye from the Principal Component Analysis (PCA)
+plotted in \cref{fig:pca}.
+
+\begin{figure}[b!]
+    \centering
+    \includegraphics[width=1.0\textwidth]{pca.pdf}
+    % \subimport{figures/}{../script/giants-dwarfs/pairplot.pdf.pgf}
+    \caption{PCA plot of the HTRU2 dataset.}
+    \label{fig:pca}
+\end{figure}
+% ------
+\section{Program}
+% ------
+
+% ------
+\section{Conclusions}
+% ------
+% Advantages of using SVM in Python include its ability to handle complex and high-dimensional data, achieve high accuracy, and be less sensitive to outliers.
+% Other characteristics like capacity control and ease of changing the implemented decision
+% surface render the support-vector network an extremely powerful and universal learning
+% machine~\cite{cortes1995supportvector}.

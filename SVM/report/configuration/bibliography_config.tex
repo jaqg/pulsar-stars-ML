@@ -1,0 +1,79 @@
+% \usepackage[backend=biber,style=chem-acs,terseinits=true,sorting=none,isbn=false,doi=false]{biblatex}
+% \addbibresource{/home/jose/Documents/latex/preamble/references} % extension must be written
+%%%%
+\usepackage[backend=bibtex,style=chem-acs,terseinits=true,sorting=none,isbn=false,doi=false]{biblatex}
+% \usepackage[backend=bibtex,style=chem-acs,terseinits=true,sorting=none,isbn=false,doi=false]{biblatex}
+\bibliography{/home/jose/Documents/latex/preamble/references}
+%%%
+\ExecuteBibliographyOptions{%
+  citetracker=true,% Citation tracker enabled in order not to repeat citations, and have two lists.
+  sorting=none,% Don't sort, just print in the order of citation
+  alldates=long,% Long dates, so we can tweak them at will afterwards
+  dateabbrev=false,% Remove abbreviations in dates, for same reason as ``alldates=long''
+  articletitle=true,% To have article titles in full bibliography
+  maxcitenames=999% Number of names before replacing with et al. Here, everyone.
+  }
+
+% No brackets around the number of each bibliography entry
+\DeclareFieldFormat{labelnumberwidth}{#1\addperiod}
+
+% Suppress article title, doi, url, etc. in citations
+\AtEveryCitekey{%
+  \ifentrytype{article}
+    {\clearfield{title}}
+    {}%
+  \clearfield{doi}%
+  \clearfield{url}%
+  \clearlist{publisher}%
+  \clearlist{location}%
+  \clearfield{note}%
+}
+
+% Print year instead of date, when available; make use of urldate
+\DeclareFieldFormat{urldate}{\bibstring{urlseen}\space#1}
+\renewbibmacro*{date}{% Based on date bib macro from chem-acs.bbx
+  \iffieldundef{year}
+    {\ifentrytype{online}
+       {\printtext[urldate]{\printurldate}}
+       {\printtext[date]{\printdate}}}
+    {\printfield[date]{year}}}
+
+% Remove period from titles
+\DeclareFieldFormat*{title}{#1}
+% Make year bold for @book types
+\DeclareFieldFormat[book]{date}{\textbf{#1}} % doctorate added this line
+\DeclareFieldFormat[book]{title}{\textit{#1}} % doctorate added this line
+\DeclareFieldFormat[book]{publisher}{#1,} % doctorate added this line
+% Embed doi and url in titles, when available
+\renewbibmacro*{title}{% Based on title bib macro from biblatex.def
+  \ifboolexpr{ test {\iffieldundef{title}}
+               and test {\iffieldundef{subtitle}} }
+    {}
+    {\ifboolexpr{ test {\ifhyperref}
+                  and not test {\iffieldundef{doi}} }
+       {\href{http://dx.doi.org/\thefield{doi}}
+          {\printtext[title]{%
+             \printfield[titlecase]{title}%
+             \setunit{\subtitlepunct}%
+             \printfield[titlecase]{subtitle}}}}
+       {\ifboolexpr{ test {\ifhyperref}
+                     and not test {\iffieldundef{url}} }
+         {\href{\thefield{url}}
+            {\printtext[title]{%
+               \printfield[titlecase]{title}%
+               \setunit{\subtitlepunct}%
+               \printfield[titlecase]{subtitle}}}}
+         {\printtext[title]{%
+            \printfield[titlecase]{title}%
+            \setunit{\subtitlepunct}%
+            \printfield[titlecase]{subtitle}}}}%
+     \newunit}%
+  \printfield{titleaddon}%
+  \clearfield{doi}%
+  \clearfield{url}%
+  \clearfield{pagetotal}%
+  \clearlist{language}% doctorate added this
+  \clearfield{note}% doctorate added this
+  \ifentrytype{article}% Delimit article and journal titles with a period
+    {\adddot}
+    {}}

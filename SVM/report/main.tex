@@ -1,0 +1,95 @@
+% +-------------------------------------------+
+% | Author: Jose Antonio Quinonero Gris       |
+% | Creation date: Friday 13:45:11 03/11/2023 |
+% +-------------------------------------------+
+\documentclass[11pt, a4paper, final]{article}
+
+% Basic configuration
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage{babel}
+\usepackage{amsmath, amssymb}
+% \usepackage{mathpazo} % mathpazo font
+
+% Load custom configuration
+\input{./configuration/packages}
+\input{./configuration/functions}
+\input{./configuration/code-style}
+\input{./configuration/style}
+\input{./configuration/newcommands}
+\input{./configuration/bibliography_config}
+\input{./front-page/info}
+
+% =============================================================================
+%                             --- Other information ---
+% =============================================================================
+\bibliography{./machine-learning}
+
+\graphicspath{{./figures/}}
+
+% Default title in case the front page is not used
+\author{\authorname}
+\title{
+    \vspace{-2cm}
+    \textbf{\ttitle}
+}
+
+\hypersetup{
+pdfauthor={\authorname},
+pdftitle={\ttitle},
+pdfsubject={},
+pdfkeywords={\kkeywords}
+}
+
+\date{\today}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+% =============================================================================
+%                             --- Title ---
+% =============================================================================
+%
+% Possible options:
+%
+% 1) Simple title in the same page
+%
+% \maketitle
+%
+% 2) Simple title with more info in the same page
+%
+% \thispagestyle{empty}
+% \input{front-page/minimal}
+%
+% 4) Simple title but in a separate page
+%
+% \thispagestyle{empty}
+% \maketitle
+%
+% 4) A minimal titlepage
+%
+\afterpage{\blankpage}
+\input{front-page/minimal-titlepage}\clearpage
+%
+% 5) A more elaborated titlepage
+%
+% \input{front-page/elaborated-titlepage}\afterpage{\blankpage}
+%
+% =============================================================================
+%                             --- Main text ---
+% =============================================================================
+\input{text}
+% =============================================================================
+%                             --- References ---
+% =============================================================================
+% \clearpage
+% \newpage
+% \addcontentsline{toc}{section}{Bibliografía}
+% \printbibliography[title={References}] % change from bibliography to references
+% \printbibliography
+% \nocite{*}
+% \bibliographystyle{apalike}
+% \bibliography{./references/*.bib}
+% \clearpage
+\end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -1,0 +1,190 @@
+%
+% --- Formato de página ---
+%
+\usepackage[a4paper, top=2cm, bottom=2cm, left=2cm, right=2cm]{geometry}
+\usepackage{lscape}
+\usepackage{multicol}
+\usepackage{fancyhdr}
+% \pagestyle{fancy}
+\usepackage{setspace}
+% \singlespace      % Interlineado normal
+% \onehalfspace       % Interlineado de 1.5
+% \doublespace      % Interlineado doble
+\spacing{1.3}     % Interlineado personalizado
+% \renewcommand{\baselinestretch}{1.5} % Interlinieado de 1.5
+\usepackage{afterpage}
+
+\newcommand\blankpage{%
+    \null
+    \thispagestyle{empty}%
+    \addtocounter{page}{-1}%
+    \newpage}
+% In the text before the blank page, insert the following code: \afterpage{\blankpage}
+%
+% --- Fuentes ---
+%
+%\usepackage[adobe-utopia]{mathdesign}
+%\usepackage{mathspec}
+\usepackage[many]{tcolorbox}   % for colored boxes
+% \usepackage{setspace}   % for line spacing
+%\usepackage{multicol}   % for multicolumns
+%
+% --- Redefinicion de entornos ---
+%
+
+%
+% --- Copyright ---
+%
+
+%
+% --- Figuras ---
+%
+\usepackage{graphicx}
+\usepackage{import}
+\usepackage{xifthen}
+\pdfminorversion=7
+\usepackage{pdfpages}
+\usepackage{transparent}
+\usepackage{xifthen}
+\usepackage{calc}
+% \usepackage{caption}
+\usepackage{subcaption}
+\usepackage{wrapfig}
+\usepackage[margin=10pt,labelfont=bf]{caption}
+\usepackage[bottom]{footmisc} % Para evitar que las figuras aparezcan por debajo del footnote
+%
+% --- Tablas ---
+%
+\usepackage{booktabs}
+% \usepackage{tablefootnote}
+\newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}} % Spacing btween lines of table
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{xtab}
+\usepackage{multirow}
+\usepackage{colortab}
+\usepackage{bigdelim}
+%
+% -- Listas y estilo ---
+%
+\usepackage{enumerate}
+\usepackage{enumitem}
+%
+% --- Matemáticas y física ---
+%
+\newcommand{\mat}[1]{\boldsymbol{\mathrm{#1}}}
+% \decimalpoint
+\usepackage{mathtools}
+\usepackage{cancel} 
+\usepackage[thinc]{esdiff}
+\usepackage{physics}
+\usepackage{braket}
+\pdfsuppresswarningpagegroup=1
+%
+% --- Química ---
+%
+\usepackage{chemfig}
+\usepackage{chemformula,array} % \ch{}
+\usepackage[version=4]{mhchem}
+\newcommand{\celsius}{$^{\circ}$C }
+%
+% --- Programming/Code ---
+%
+\usepackage{verbatimbox} % Centrar código con verbatim
+%
+% --- Referencias ---
+%
+\usepackage[colorlinks=true,
+linkcolor = blue,
+urlcolor  = blue,
+citecolor = black,
+anchorcolor = blue]{hyperref}
+\usepackage{cleveref}
+\newcommand{\equatref}[1]{eq.~(\ref{#1})}
+\newcommand{\eqsref}[1]{Equations~(\ref{#1})}
+\newcommand{\tabref}[1]{Table~\ref{#1}}
+\newcommand{\figref}[1]{Figure~\ref{#1}}
+%
+% --- Otros ---
+%
+\usepackage{layouts}
+% \printinunitsof{cm}\prntlen{\textwidth} % to print \textwidth in cm
+\usepackage{rotating}
+\usepackage{lipsum}
+\usepackage{xcolor}
+\usepackage[nottoc,numbib]{tocbibind}
+\usepackage{blindtext}
+\newcommand{\incfig}[1]{%
+        \def\svgwidth{\columnwidth}
+            \import{./figures/}{#1.pdf_tex}
+        }
+%
+% --- Colores ---
+%
+\definecolor{blue1}{HTML}{5989cf}    % setting main color to be used
+\definecolor{blue2}{HTML}{cde4ff}     % setting sub color to be used
+\definecolor{mycyan}{HTML}{CBE5EA}     % setting sub color to be used
+\definecolor{mycyan2}{HTML}{dcdde2}     % setting sub color to be used
+\definecolor{mymint}{HTML}{DAF7A6}     % setting sub color to be used
+%
+% --- Cajas ---
+%
+\tcbuselibrary{many}   % many : loads the libraries skins, breakable, raster, hooks, theorems, fitting and xparse .
+\newtcolorbox{bluebox}[2][]{
+	tile,
+	frame style={left color=red!75!black,right color=red!10!yellow},
+	boxrule = 2pt,
+    opacityfill = 1.0,
+	arc is angular,
+	fonttitle = \bfseries,
+	title={#2}, #1
+}
+% Boxed equation
+\usepackage{empheq}
+\newtcbox{\mymathbox}[1][]{%
+    nobeforeafter, math upper, tcbox raise base,
+    standard jigsaw, sharp corners, colframe=white!45!black,
+    colback=white!95!black, leftrule=4pt, rightrule=0pt, toprule=0pt, bottomrule=0pt,
+    #1}
+%
+% --- Dedicatoria ---
+%
+\newenvironment{dedication}
+{
+   \cleardoublepage
+   \thispagestyle{empty}
+   \vspace*{\stretch{1}}
+   \hfill\begin{minipage}[t]{0.66\textwidth}
+   \raggedright
+}%
+{
+   \end{minipage}
+   \vspace*{\stretch{3}}
+   \clearpage
+}
+
+% \newenvironment{dedication}
+%   {\clearpage           % we want a new page
+%    \thispagestyle{empty}% no header and footer
+%    \vspace*{\stretch{1}}% some space at the top
+%    \itshape             % the text is in italics
+%    \raggedleft          % flush to the right margin
+%   }
+%   {\par % end the paragraph
+%    \vspace{\stretch{3}} % space at bottom is three times that at the top
+%    \clearpage           % finish off the page
+%   }
+%Clears plain-page pg# settings, relocates pg#'s @ top-right-corner.
+\makeatletter
+\renewcommand{\ps@plain}{
+\renewcommand\@oddhead{\hfill\normalfont\textrm{\thepage}}
+\renewcommand\@evenhead{}
+\renewcommand\@oddfoot{}
+\renewcommand\@evenfoot{}}
+%
+% --- Codigo ---
+%
+% \usepackage{minted}
+\usepackage{listings}
+\usepackage{lstautogobble}  % Fix relative indenting
+\usepackage{zi4}            % Nice font
