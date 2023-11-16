@@ -33,25 +33,12 @@ and in
 \href{https://www.kaggle.com/datasets/charitarth/pulsar-dataset-htru2}{kaggle}.
 HTRU2 is a data set which describes a sample of pulsar candidates collected
 during the High Time Resolution Universe Survey (South)~\cite{2016MNRAS.459.1104L}.
-
-Pulsars are a rare type of Neutron star that, as they (rapidly) rotate, produce 
-a detectable pattern of broadband radio emission, which repeats periodically.
-Each pulsar produces a slightly different emission pattern, which varies slightly
-with each rotation. 
-Thus, a potential signal detection, known as a ``candidate'', is averaged over many
-rotations of the pulsar.
-In the absence of additional info, each candidate could potentially describe a
-real pulsar.
-However, in practice almost all detections are caused by radio frequency
-interference (RFI) and noise, making legitimate signals hard to find
-~\cite{2016MNRAS.459.1104L, 2010MNRAS.409..619K, 2004hpa..book.....L}.
-Here is when machine learning algorithms come in hand to automatically label
-pulsar candidates, which is the purpose of this report.
+For more information about pulsars, see the \nameref{sec:appendix}.
 
 The dataset contains a total of 17898 samples, where 16259 are spurious examples
 caused by RFI/noise, and 1639 are real pulsar examples.
 Each candidate is described by 8 continuous variables, which correspond to
-simple statistic obtained from the integrated pulse profile and from the 
+simple statistics obtained from the integrated pulse profile and from the 
 dispersion signal-to-noise ratio (DM-SNR) curve.
 In the last entry, the class labels are 0 (negative) and 1 (positive):
 
@@ -81,35 +68,117 @@ Summary of the HTRU2 dataset samples:
 In order to visualize the data, the pairplot of the dataset is shown in
 \ref{fig:pairplot}.
 
-\begin{figure}[b!]
-    \centering
-    \includegraphics[width=1.0\textwidth]{pairplot.jpg}
-    % \subimport{figures/}{../script/giants-dwarfs/pairplot.pdf.pgf}
-    \caption{Pairplot of the HTRU2 dataset.}
-    \label{fig:pairplot}
-\end{figure}
+% \begin{figure}[b!]
+%     \centering
+%     \includegraphics[width=1.0\textwidth]{pairplot.jpg}
+%     % \subimport{figures/}{../script/giants-dwarfs/pairplot.pdf.pgf}
+%     \caption{Pairplot of the HTRU2 dataset.}
+%     \label{fig:pairplot}
+% \end{figure}
 
 Looking at the positive $\left( \approx 10\% \right)$ \textit{vs} negative 
 $\left( \approx 90\% \right)$ ratio and the pairplot in \cref{fig:pairplot},
 the raw data is imbalanced.
 It can be confirmed simply by eye from the Principal Component Analysis (PCA)
 plotted in \cref{fig:pca}.
+Then, the data needs to be balanced beforehand, so that the trained model is
+not biased across the majority class, reducing the possibility of producing
+false positives.
 
-\begin{figure}[b!]
+% \begin{figure}[b!]
+%     \centering
+%     \includegraphics[width=1.0\textwidth]{pca-imbalanced.pdf}
+%     % \subimport{figures/}{../script/giants-dwarfs/pairplot.pdf.pgf}
+%     \caption{PCA plot of the raw HTRU2 dataset.}
+%     \label{fig:pca}
+% \end{figure}
+
+% ------
+\section{Preprocessing of the data \& training of the SVM}
+% ------
+In order to compare the performance of the model trained with imbalanced and
+balanced data, the raw data is splitted into training (80\%) and test (20\%) sets.
+Therefore, the training set data is balanced using three methods: 
+\begin{itemize}
+    \item Oversampling (plus the SMOTE method): 
+    \item Undersampling (plus the NearMiss method): 
+    \item Class-weight: 
+\end{itemize}
+The SVM is trained, for each one of the training sets, and tested with the test
+set.
+Some simple metrics are calculated
+\footnote{The results vary slightly at every run of the program, due to the 
+randomization algorithms used in the balancing methods.}
+in order to compare the performance of the
+different methods, and are listed in \cref{tab:metrics}.
+
+\begin{table}[tb!]
+    \ra{1.2} % Spacing btween lines of table
+    \caption{Metrics for the different classifiers.}
+    \label{tab:metrics}
     \centering
-    \includegraphics[width=1.0\textwidth]{pca.pdf}
-    % \subimport{figures/}{../script/giants-dwarfs/pairplot.pdf.pgf}
-    \caption{PCA plot of the HTRU2 dataset.}
-    \label{fig:pca}
-\end{figure}
+    \begin{tabular}{@{}c c c c@{}}
+        \toprule
+        Classifier   &   Accuracy &   Precision &   Recall  \\
+        \midrule
+
+        Imbalanced   &     0.9740 &      0.9321 &   0.7671  \\
+        Oversampled  &     0.9595 &      0.7196 &   0.9006  \\
+        SMOTE        &     0.9578 &      0.7090 &   0.9006  \\
+        Undersampled &     0.9534 &      0.6841 &   0.8944  \\
+        NearMiss     &     0.7578 &      0.2560 &   0.8882  \\
+        Class-weight &     0.9609 &      0.7321 &   0.8913  \\
+
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+Then, the program chooses the best classifier (as the one whose mean value of the
+three metrics is the largest) and stores it for the problem data.
+In the case listed in \cref{tab:metrics}, the chosen classifier is class-weight,
+with a high accuracy of $\approx 96\%$.
+
 % ------
-\section{Program}
+\section{Problem data \& Results}
 % ------
+The chosen trained SVM classifier can be used to classify possible pulsar
+candidates.
+As an example, 3 candidates from the LOFAR Tied-Array All-sky Survey 
+(LOTAAS1)~\cite{vanderwateren2023lofar} dataset, listed in the
+\inline{problem.csv} file,
+are classified with this model.
+The results are shown in \cref{tab:results}.
+
+\begin{table}[b!]
+    \ra{1.2} % Spacing btween lines of table
+    \caption{Results for the problem data.}
+    \label{tab:results}
+    \centering
+    \begin{tabular}{@{}c c c c c c c c c@{}}
+        \toprule
+        
+        \midrule
+
+        
+
+        \bottomrule
+    \end{tabular}
+\end{table}
 
 % ------
 \section{Conclusions}
 % ------
-% Advantages of using SVM in Python include its ability to handle complex and high-dimensional data, achieve high accuracy, and be less sensitive to outliers.
-% Other characteristics like capacity control and ease of changing the implemented decision
-% surface render the support-vector network an extremely powerful and universal learning
-% machine~\cite{cortes1995supportvector}.
+Support Vector Machines are powerful methods for classification and regression problems.
+One of its main advantages is its ability to handle complex and high-dimensional
+data, achieve high accuracy, and be less sensitive to outliers than other
+algorithms.
+Also, its capacity control and ease of changing the implemented decision
+surface makes it an extremely powerful and universal learning 
+machine~\cite{cortes1995supportvector}.
+
+With this report, the very difficult and tedious task of labeling pulsar star
+candidates is solved and automatized with a very simple code and very few computation
+time\footnote{The dataset used is not very large, so that the training time is
+    not too long. Eventhough, the final accuracy of the model is very good and,
+    in my opinion, more than good enough for the task.}
+, resulting in a very robust and easily extensible model.
